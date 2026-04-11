@@ -1,0 +1,202 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.signup-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: url("/clinic-bg.jpg") center/cover no-repeat;
+}
+
+.signup-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.56);
+  backdrop-filter: blur(2px);
+}
+
+.signup-card {
+  position: relative;
+  width: min(820px, 100%);
+  padding: 34px 48px 30px;
+  border: 0;
+}
+
+.signup-title {
+  font-size: clamp(2rem, 3vw, 3.1rem);
+  font-weight: 400;
+  color: #2d5e8f;
+}
+
+.signup-title span {
+  font-weight: 800;
+  color: #1c4f80;
+}
+
+.form-label {
+  font-size: 1.45rem;
+  margin-bottom: 0.55rem;
+  color: #111;
+}
+
+.custom-input {
+  height: 66px;
+  border: none !important;
+  background: #f4f4f4 !important;
+  border-radius: 18px !important;
+  padding: 0 1rem !important;
+  font-size: 1.05rem;
+  color: #333;
+  box-shadow: none !important;
+}
+
+.custom-input::placeholder {
+  color: #b5b5b5;
+}
+
+.custom-input:focus {
+  background: #f4f4f4 !important;
+  box-shadow: 0 0 0 0.18rem rgba(28, 91, 145, 0.12) !important;
+}
+
+.password-wrap {
+  position: relative;
+}
+
+.password-wrap .custom-input {
+  padding-right: 3rem !important;
+}
+
+.eye-btn {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #b6b6b6;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hint {
+  margin: 0.5rem 0 0;
+  text-align: right;
+  color: #9b9b9b;
+  font-size: 0.95rem;
+}
+
+.terms-row {
+  font-size: 1.05rem;
+  color: #222;
+}
+
+.terms-row .form-check-input {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.15rem;
+}
+
+.terms-link {
+  color: #2d5e8f;
+  text-decoration: none;
+}
+
+.submit-btn {
+  height: 68px;
+  max-width: 470px;
+  margin: 0 auto;
+  display: block;
+  border: none;
+  background: #1c5b91 !important;
+  font-size: 2rem;
+  font-weight: 600;
+  box-shadow: 0 8px 18px rgba(28, 91, 145, 0.25);
+}
+
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 1.5rem 0 1rem;
+  color: #a6a6a6;
+  font-size: 1rem;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 35%;
+  height: 1px;
+  background: #d9d9d9;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.divider span {
+  padding: 0 12px;
+  background: transparent;
+}
+
+.social-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.social-btn.facebook {
+  background: #1877f2;
+  color: #fff;
+}
+
+.social-btn.google {
+  background: #fff;
+  color: #db4437;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 768px) {
+  .signup-card {
+    padding: 24px 18px;
+  }
+
+  .form-label {
+    font-size: 1.1rem;
+  }
+
+  .custom-input {
+    height: 56px;
+    font-size: 0.98rem;
+  }
+
+  .submit-btn {
+    height: 58px;
+    font-size: 1.5rem;
+  }
+
+  .divider::before,
+  .divider::after {
+    width: 28%;
+  }
+}
