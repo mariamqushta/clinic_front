@@ -199,8 +199,9 @@ export default function SignupPage() {
                   type="button"
                   className="eye-btn"
                   onClick={() => setShowPassword((p) => !p)}
+                  aria-label="Toggle password visibility"
                 >
-                  <EyeIcon open={showPassword} />
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
               <div className={`password-hint ${errors.passwordError ? "hint-error" : ""}`}>
@@ -223,9 +224,11 @@ export default function SignupPage() {
                   type="button"
                   className="eye-btn"
                   onClick={() => setShowConfirmPassword((p) => !p)}
+                  aria-label="Toggle password visibility"
                 >
-                  <EyeIcon open={showConfirmPassword} />
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
+                
               </div>
               {errors.confirmMismatch ? (
                 <div className="error-right-text not-matching">Not matching</div>
