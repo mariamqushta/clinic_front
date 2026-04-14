@@ -1,1 +1,13 @@
 
+.headerstyle{
+  color: #104D87;
+  font-family: 'Inter', sans-serif;
+}.navbarli1:hover{
+     color: #104D87 !important;
+     text-decoration: underline #104D87 !important;
+}.navimg{
+  width: 50px !important;
+  height: 50px !important;
+}.cardbutton{
+  background-color: #104D87;
+}
