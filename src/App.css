@@ -1,7 +1,7 @@
 
 .headerstyle{
   color: #104D87;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Island Moments', cursive;
 }.navbarli1:hover{
      color: #104D87 !important;
      text-decoration: underline #104D87 !important;
@@ -10,4 +10,187 @@
   height: 50px !important;
 }.cardbutton{
   background-color: #104D87;
+}.bagemaincolor{
+  color: #104D87;
+}
+
+.arrow-wrapper {
+  font-size: 160px;
+  position: relative;
+  width: fit-content;
+}
+
+/* base arrow */
+.arrow {
+  font-size: 60px;
+  transform: rotate(50deg);
+  position: absolute;
+  top: 0;
+  left: 0;
+  
+}
+
+/* dark half */
+.dark {
+  color: #90CAF9;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.light {
+  color: #2196F3;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+/* ===== Calendar Container ===== */
+.calendar-box {
+  background-color: #F1F4F8;
+  /* padding: 10px; */
+  /* min-height: 420px;
+  width: 100%; */
+  display: flex;
+  
+}
+
+/* ===== Main Calendar ===== */
+.react-datepicker {
+  width: 100% !important;
+  height: 100% !important;
+  
+  border: none !important;
+  background-color: transparent !important;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+/* ===== Header ===== */
+.react-datepicker__header {
+  background-color: #E9EDF1 !important;
+  border-bottom: none !important;
+ font-size: 30px !important;
+ width: 100% !important;
+  margin: 0 !important;
+  padding:10px 10px !important;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Month title */
+.react-datepicker__current-month {
+  font-size: 26px !important;
+  font-weight: 200 !important;
+  color: #104D87;
+  margin-bottom: 10px;
+}
+
+/* ===== Navigation arrows (BIGGER) ===== */
+.react-datepicker__navigation {
+  width: 48px !important;
+  height: 48px !important;
+  /* top: 3px !important; pushes them lower */
+  /* border-radius: 50% !important; */
+}
+
+.react-datepicker__navigation-icon::before {
+  border-width: 2px 2px 0 0;
+  border-color: #0e0e0e !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+
+/* hover effect for arrows */
+.react-datepicker__navigation:hover {
+  background-color: rgba(16, 77, 135, 0.12);
+  /* border-radius: 50%; */
+}
+
+/* ===== Month layout ===== */
+.react-datepicker__month-container {
+  width: 100%;
+}
+
+/* Week & days spacing */
+.react-datepicker__day-names,
+.react-datepicker__week {
+  display: flex;
+  justify-content: space-around;
+
+}
+
+/* ===== Day cells ===== */
+.react-datepicker__day {
+  width: 1.5rem;
+  height: 2.5rem;
+  /* line-height: 2rem; */
+  padding: 3px 0px !important;
+  margin: 0;
+  /* border-radius: 50%; */
+}
+
+/* Hover */
+.react-datepicker__day:hover {
+  background-color: rgba(16, 77, 135, 0.15);
+   /* border-radius: 50% !important; */
+}
+
+/* Selected day */
+.react-datepicker__day--selected {
+  background-color: #104D87 !important;
+  color: white !important;
+  /* border-radius: 50%; */
+}
+
+/* Today */
+.react-datepicker__day--today {
+  font-weight: bold;
+  border: 1px solid #104D87;
+}
+.book-btn {
+  background-color: #104D87;
+  color: white;
+  padding: 15px 40px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}.btn-outline{
+  border: solid 3px #104D87 !important;
+  color: #104D87 !important;
+  padding: 15px 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.book-btn:hover {
+  background-color: #0b3a66;
+}
+
+.time-slot {
+  padding: 10px;
+  text-align: center;
+  background-color: #F1F4F8;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  border: 1px solid #ccc;
+}
+
+/* hover */
+.time-slot:hover {
+  background-color: rgba(16, 77, 135, 0.1);
+}
+
+/* selected */
+.time-slot.active {
+  background-color: #104D87;
+  color: white;
+  border: none;
+}.confirm-page{
+  background-color: #F1F4F8CC;
+  border:solid 1px #2C5C88 !important;
+}.confirm-details{
+  margin-bottom: 80px !important;
 }

@@ -22,6 +22,7 @@ function Home() {
         />
       </div>
 
+
       {/* Doctors Grid */}
       <div className="container">
             <div className="row  justify-align-content-around ">

@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Link } from "react-router-dom";
 
 function Doctorcard({ doctor }) {
   return (
@@ -12,7 +13,12 @@ function Doctorcard({ doctor }) {
         <h5 className="card-title">{doctor.name}</h5>
         <p className="card-text">{doctor.department}</p>
       </div>
-      <button className="text-light rounded-3 cardbutton mx-auto w-75 my-2 p-2"><a>View Details</a></button>
+      <Link
+        to={`/book/${doctor.id}`}
+        className="text-light rounded-3 cardbutton mx-auto w-75 my-2 p-2 text-decoration-none text-center"
+      >
+        View Details
+      </Link>
     </div>
   )
 }
