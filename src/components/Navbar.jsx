@@ -17,10 +17,10 @@ function Navbar() {
                 <a className="nav-link active navbarli1" aria-current="page" href="/">Home</a>
                 </li>
                 <li className="nav-item">
-                <a className="nav-link navbarli1 text-black" href="#">Appointments</a>
+                <a className="nav-link navbarli1 text-black" href="/Appointments">Appointments</a>
                 </li>
                 <li className="nav-item">
-                <a className="nav-link navbarli1 text-black" href="#">Chat</a>
+                <a className="nav-link navbarli1 text-black" href="/Chat">Chat</a>
                 </li>
                 <li className="nav-item">
                 <a className="nav-link navbarli1 text-black" href="#">AI Assistant</a>

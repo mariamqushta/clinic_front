@@ -194,3 +194,21 @@
 }.confirm-details{
   margin-bottom: 80px !important;
 }
+.appbtn{
+  border:solid 2px #104D87 !important;
+  padding: 10px  30px !important;
+  border-radius: 10px;
+  
+}
+.appbtn.active{
+  background-color: #104D87 !important;
+  color: white !important;
+}.divappointent{
+  background-color: #F1F4F8CC !important;
+}.Cancel{
+ background-color: #FFDDDD !important;
+ border: none !important;
+}.Reschedule{
+ background-color: #DCE1FF !important;
+  border: none !important;
+}
