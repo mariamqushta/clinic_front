@@ -1,0 +1,107 @@
+body {
+  margin: 0;
+  font-family: Arial;
+}
+
+.layout {
+  display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background: linear-gradient(#1e3c72, #2a5298);
+  color: white;
+  padding: 20px;
+}
+
+.logo {
+  margin-bottom: 30px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin: 18px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.sidebar .active {
+  background: rgba(255,255,255,0.1);
+  padding: 8px;
+  border-radius: 8px;
+}
+
+/* Content */
+.content {
+  flex: 1;
+  padding: 40px;
+  background: #f5f7fb;
+}
+
+/* Profile Card */
+.profile-card {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  margin-bottom: 25px;
+  border: 1px solid #ddd;
+}
+
+.avatar {
+  font-size: 70px;
+  color: #ff6b81;
+  margin-right: 15px;
+}
+
+.info h3 {
+  margin: 0;
+}
+
+.info p {
+  margin: 0;
+  color: gray;
+}
+
+/* Form */
+.form {
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+}
+
+.form label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.form input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.save-btn {
+  margin-top: 25px;
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(#4a7cff, #2f6bff);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+}
