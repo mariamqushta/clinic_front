@@ -1,5 +1,12 @@
 import "./Profile.css";
-import { FaUserCircle } from "react-icons/fa";
+import {
+  FaTachometerAlt,
+  FaCalendarAlt,
+  FaComments,
+  FaUserCircle,
+  FaSignOutAlt,
+  FaPen,
+} from "react-icons/fa";
 
 function Profile() {
   return (
@@ -7,29 +14,45 @@ function Profile() {
 
       {/* Sidebar */}
       <div className="sidebar">
-        <h2 className="logo">Odonto</h2>
+        <h1 className="logo">Odonto</h1>
 
         <ul>
-          <li>🏠 Home</li>
-          <li>📅 Appointments</li>
-          <li>💬 Chat</li>
-          <li>🤖 AI Assistant</li>
-          <li className="active">👤 Profile</li>
-          <li>🚪 Log out</li>
+          <li><FaTachometerAlt /> Dashboard</li>
+          <li><FaCalendarAlt /> Appointments</li>
+          <li><FaComments /> Chats</li>
+
+          <li className="active">
+            <FaUserCircle /> Profile
+          </li>
+
+          <li className="logout">
+            <FaSignOutAlt /> Log out
+          </li>
         </ul>
       </div>
 
       {/* Content */}
       <div className="content">
 
-        {/* Profile Card */}
+        {/* Top Card */}
         <div className="profile-card">
 
-          <FaUserCircle className="avatar" />
+          <div className="doctor-image">
+            <FaUserCircle className="doctor-icon" />
+          </div>
 
-          <div className="info">
-            <h3>Yara Ahmed</h3>
-            <p>Patient</p>
+          <div className="doctor-info">
+            <div className="top-row">
+              <h3>Dr. Ahmed Mohamed</h3>
+              <FaPen className="edit-icon" />
+            </div>
+
+            <h4>Orthodontics</h4>
+
+            <p>
+              10+ years of experience in braces and smile correction.
+              Dedicated to providing the best dental care.
+            </p>
           </div>
 
         </div>
@@ -38,18 +61,20 @@ function Profile() {
         <div className="form">
 
           <label>Name</label>
-          <input type="text" defaultValue="Yara Ahmed Ali AMR" />
+          <input type="text" defaultValue="Ahmed Mohamed Ali AMR" />
 
           <label>Email</label>
-          <input type="email" defaultValue="Ya@gmail.com" />
+          <input type="email" defaultValue="ahm@gmail.com" />
 
           <label>Phone</label>
-          <input type="text" defaultValue="0102345798" />
+          <input type="text" defaultValue="01123456788" />
 
-          <label>Date of Birth</label>
-          <input type="date" />
+          <label>specialty</label>
+          <input type="text" defaultValue="Orthodontics" />
 
-          <button className="save-btn">Save Changes</button>
+          <button className="save-btn">
+            Save Changes
+          </button>
 
         </div>
 
