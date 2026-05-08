@@ -106,7 +106,7 @@ export default function ResetPassword() {
         </form>
 
         <div className="back-link">
-          Back to <a href="/login">Login</a>
+          Back to <a href="/LoginDr">Login</a>
         </div>
       </div>
     </div>

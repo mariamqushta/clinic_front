@@ -43,7 +43,7 @@ export default function ForgotPassword() {
         </form>
 
         <div className="forgot-back">
-          Back to <Link to="/login">Login</Link>
+          Back to <Link to="/LoginDr">Login</Link>
         </div>
       </div>
     </div>
