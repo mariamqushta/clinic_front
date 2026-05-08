@@ -74,7 +74,7 @@ export default function ResetPassword() {
               </button>
             </div>
 
-            <p className="hint">
+            <p className="hintp">
               Must be 8+ characters and include a number
             </p>
           </div>
@@ -100,7 +100,7 @@ export default function ResetPassword() {
             </div>
           </div>
 
-          <button type="submit" className="submit-btn">
+          <button type="submit" className="submit-btnr">
             Reset Password
           </button>
         </form>

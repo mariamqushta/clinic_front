@@ -14,31 +14,31 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="odontoPage">
-      <div className="odontoLeft">
-        <h1 className="odontoTitle">
+    <div className="odontoPager">
+      <div className="odontoLeftr">
+        <h1 className="odontoTitler">
           Welcome to <span>Odonto!</span>
         </h1>
 
-        <form className="odontoForm" onSubmit={handleSubmit}>
-          <label className="odontoLabel" htmlFor="email">
+        <form className="odontoFormr" onSubmit={handleSubmit}>
+          <label className="odontoLabelr" htmlFor="email">
             Email
           </label>
           <input
             id="email"
             type="email"
-            className="odontoInput"
+            className="odontoInputr"
             placeholder="Enter your Email"
           />
 
-          <label className="odontoLabel" htmlFor="password">
+          <label className="odontoLabelr" htmlFor="password">
             Password
           </label>
-          <div className="passwordWrap">
+          <div className="passwordWrapr">
             <input
               id="password"
               type={showPassword ? "text" : "password"}
-              className="odontoInput passwordInput"
+              className="odontoInputr passwordInputr"
               placeholder="********************"
             />
             <button
@@ -51,41 +51,44 @@ export default function LoginPage() {
             </button>
           </div>
 
-          <div className="forgotRow">
-            <button type="button" className="forgotBtn">
-              Forget password?
+          <div className="forgotRowr">
+            <button
+                type="button"
+                className="forgotBtnr"
+                onClick={() => navigate("/forgot-password")}>
+                           Forget password?
             </button>
           </div>
 
-          <button type="submit" className="loginBtn">
+          <button type="submit" className="loginBtnr">
             Login
           </button>
 
-          <div className="divider">
+          <div className="dividerr">
             <span />
             <p>Or Login with</p>
             <span />
           </div>
 
-          <div className="socialRow">
-            <button type="button" className="socialBtn facebookBtn">
+          <div className="socialRowr">
+            <button type="button" className="socialBtnr facebookBtnr">
               <FaFacebookF />
             </button>
-            <button type="button" className="socialBtn googleBtn">
+            <button type="button" className="socialBtnr googleBtnr">
               <FcGoogle />
             </button>
           </div>
         </form>
       </div>
 
-      <div className="odontoRight">
-        <div className="odontoShape" />
-        <div className="odontoPortal">
+      <div className="odontoRightr">
+        <div className="odontoShaper" />
+        <div className="odontoPortalr">
           <h2>Doctor Portal</h2>
           <button
             type="button"
-            className="signupBtn"
-            onClick={() => navigate("/signup")}
+            className="signupBtnr"
+            onClick={() => navigate("/doctor-signup")}
           >
             Sign up
           </button>
