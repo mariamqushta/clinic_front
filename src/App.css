@@ -2,6 +2,7 @@
 .headerstyle{
   color: #104D87;
   font-family: 'Island Moments', cursive;
+  font-size: 60px !important;
 }.navbarli1:hover{
      color: #104D87 !important;
      text-decoration: underline #104D87 !important;
@@ -211,4 +212,37 @@
 }.Reschedule{
  background-color: #DCE1FF !important;
   border: none !important;
+}.Accept {
+  background-color: #D8FFE0 !important;
+  color: #46B270 !important;
+  border: none !important;
+}
+
+.Reject {
+  background-color: #FFDDDD !important;
+  color: #F67E75 !important;
+  border: none !important;
+}
+.side-link {
+  color: #104D87 !important;
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.side-link:hover {
+  background-color: rgba(16, 77, 135, 0.1);
+}
+
+.side-link.active {
+  font-weight: 700;
+  font-size: 20px;
+  background-color: rgba(16, 77, 135, 0.15);
+  transform: scale(1.05);
 }

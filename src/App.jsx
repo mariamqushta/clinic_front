@@ -11,6 +11,8 @@ import DoctorSignupPage from "./Pages/DoctorSignupPage";
 import UnderReviewPage from "./Pages/UnderReviewPage";
 import RequestAcceptedPage from "./Pages/RequestAcceptedPage";
 import RequestRejectedPage from "./Pages/RequestRejectedPage";
+import AppointmentsDr from "./Pages/AppointmentsDr";
+import Profile from "./Pages/Profile";
 
 import "./App.css";
 
@@ -21,6 +23,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/book/:id" element={<Book1 />} />
         <Route path="/appointments" element={<Appointments />} />
+        <Route path="/AppointmentsDr" element={<AppointmentsDr />} />
+        <Route path="/Profile" element={<Profile />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/LoginDr" element={<LoginPageDr />} />
