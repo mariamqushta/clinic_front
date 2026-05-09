@@ -166,9 +166,6 @@ function Appointments() {
         <>
       <button className='px-4 py-3 rounded rounded-3 my-3 text-capitalize fw-semibold Reschedule'
       onClick={() => handleReschedule(app)}>Reschedule</button>
-
-      <button className='px-4 py-3 rounded rounded-3 my-3 text-capitalize fw-semibold mx-2 Cancel'
-        onClick={() => handleCancel(app.id)}>Cancel</button>
         </>
     )}
 
