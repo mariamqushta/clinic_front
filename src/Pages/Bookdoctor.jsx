@@ -1,88 +1,101 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import { FaLocationArrow } from "react-icons/fa";
 import Navbar from "../components/Navbar";
-import doctors from "../models/doctorele";
+import { createAppointment ,updateAppointment} from "../api/appointmentApi";
+import { getDoctorById } from "../api/doctorApi";
+import { FaLocationArrow } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 function Book1() {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const location = useLocation();
-  const editAppointment = location.state?.appointment;
 
+  const editAppointment = location.state?.appointment;
+  const [doctor, setDoctor] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [date, setDate] = useState(new Date());
-  const navigate = useNavigate();
   const [confirmed, setConfirmed] = useState(false);
+  const isEditable =
+  editAppointment &&
+  ["pending", "confirmed"].includes(editAppointment.status);
 
-  const { id } = useParams();
 
-  // ✅ FIX: unified doctor resolving (NEW + EDIT)
-  const doctorId = editAppointment?.doctorId || Number(id);
-  const doctor = doctors.find((d) => d.id === doctorId);
 
-  // ✅ prefill when editing
+  // Load doctor from backend
+  useEffect(() => {
+    const fetchDoctor = async () => {
+      try {
+        const data = await getDoctorById(id);
+        setDoctor(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchDoctor();
+  }, [id]);
+
+  // Prefill edit
   useEffect(() => {
     if (editAppointment) {
-      if (editAppointment.date) {
-        setDate(new Date(editAppointment.date));
-      }
-      if (editAppointment.time) {
-        setSelectedTime(editAppointment.time);
-      }
+      setDate(new Date(editAppointment.date));
+      setSelectedTime(editAppointment.time);
     }
   }, [editAppointment]);
 
-  const handleBooking = () => {
-    if (!date || !selectedTime) {
-      alert("Please select date and time");
-      return;
+const handleBooking = async () => {
+  if (!date || !selectedTime) {
+    return alert("Select date & time");
+  }
+  if (!doctor?._id) {
+  alert("Doctor not loaded yet");
+  return;
+  }
+
+  try {
+    const [time, modifier] = selectedTime.split(" ");
+    let [hours, minutes] = time.split(":").map(Number);
+
+    if (modifier === "PM" && hours !== 12) {
+      hours += 12;
     }
 
-    const stored =
-      JSON.parse(localStorage.getItem("appointments")) || [];
-
-    if (editAppointment) {
-      // ✅ UPDATE EXISTING APPOINTMENT
-      const updated = stored.map((app) =>
-        app.id === editAppointment.id
-          ? {
-              ...app,
-              date: date.toISOString().split("T")[0],
-              time: selectedTime,
-              status: "pending",
-            }
-          : app
-      );
-
-      localStorage.setItem(
-        "appointments",
-        JSON.stringify(updated)
-      );
-    } else {
-      // ✅ CREATE NEW APPOINTMENT
-      const newAppointment = {
-        id: Date.now(),
-        doctorId: doctor?.id,
-        doctorName: doctor?.name,
-        service: doctor?.department,
-        date: date.toISOString().split("T")[0],
-        time: selectedTime,
-        status: "pending",
-      };
-
-      localStorage.setItem(
-        "appointments",
-        JSON.stringify([...stored, newAppointment])
-      );
+    if (modifier === "AM" && hours === 12) {
+      hours = 0;
     }
+
+    const bookingDate = new Date(date);
+    bookingDate.setHours(hours, minutes, 0, 0);
+
+if (editAppointment && isEditable) {
+  await updateAppointment(editAppointment._id, {
+    date: bookingDate.toISOString(),
+    duration: 30,
+  });
+} else if (!editAppointment) {
+    await createAppointment({
+    doctorId: id,
+    date: bookingDate.toISOString(),
+    duration: 30,
+    status: "pending",
+  });
+} else {
+  alert("This appointment cannot be rescheduled anymore.");
+  return;
+}
+   console.log("DOCTOR OBJECT:", doctor);
+console.log("DOCTOR ID:", doctor?._id);
+   
 
     setConfirmed(true);
-  };
+  } catch (err) {
+    console.log("BOOK ERROR:", err.response?.data || err);
+    alert("Booking failed");
+  }
+};
 
   // ❗ SAFE GUARD (fix "doctor not found")
   if (!doctor) {
@@ -142,9 +155,11 @@ function Book1() {
       </div>
     );
   }
+  
 
   return (
     <div>
+    
       <Navbar />
 
       <div className="container mt-4">
@@ -152,7 +167,7 @@ function Book1() {
           <div className="d-flex align-items-between">
             <div className="d-flex gap-4 align-items-center flex-wrap">
               <img
-                src={doctor.image}
+                src={doctor.avatarUrl}
                 alt={doctor.name}
                 style={{
                   width: "200px",
@@ -164,9 +179,9 @@ function Book1() {
               <div>
                 <h5 className="fw-bold">{doctor.name}</h5>
                 <h5 className="fw-bold my-3 bagemaincolor">
-                  {doctor.department}
+                  {doctor.specialization}
                 </h5>
-                <p>{doctor.description}</p>
+                <p>{doctor.bio}</p>
               </div>
             </div>
 

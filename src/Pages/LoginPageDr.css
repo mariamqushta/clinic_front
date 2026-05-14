@@ -206,6 +206,7 @@ body {
     radial-gradient(circle at 34% 50%, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.28) 18%, rgba(0, 0, 0, 0) 40%),
     linear-gradient(135deg, #07172f 0%, #0a2a52 35%, #155694 100%);
   clip-path: polygon(3% 51%, 74% 0, 100% 0, 100% 100%, 74% 101%);
+  pointer-events: none;
 }
 
 .odontoPortalr {
@@ -245,10 +246,13 @@ body {
   .odontoLeftr {
     flex: unset;
     padding: 52px 24px 24px;
+     position: relative;
+     z-index: 10;
   }
 
   .odontoRightr {
     min-height: 320px;
+    pointer-events: none;
   }
 
   .odontoShaper {

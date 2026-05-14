@@ -2,17 +2,51 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaFacebookF, FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { loginDoctor } from "../api/authApi";
 import "./LoginPageDr.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // هنا حط API login لو عندك backend
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  console.log("LOGIN CLICKED");
 
+  try {
+    const res = await loginDoctor({ email, password });
+
+  console.log("LOGIN RESPONSE:", res);
+
+  const user = res?.data;
+  const token = res?.access_token;
+
+  if (!user) {
+    console.log("RAW RESPONSE:", res);
+  return alert("Login failed: user missing");
+}
+
+if (user.role !== "doctor") {
+  return alert("This account is not a doctor");
+}
+
+localStorage.setItem("token", token);
+localStorage.setItem("role", user.role);
+localStorage.setItem("user", JSON.stringify(user));
+
+localStorage.setItem("doctorId", user._id);
+
+console.log("DOCTOR ID SAVED:", user._id);
+
+navigate("/doctor/appointments");
+
+  } catch (err) {
+    console.log("ERROR:", err.response?.data || err.message);
+    alert(err.response?.data?.message || "Login failed");
+  }
+};
   return (
     <div className="odontoPager">
       <div className="odontoLeftr">
@@ -24,12 +58,14 @@ export default function LoginPage() {
           <label className="odontoLabelr" htmlFor="email">
             Email
           </label>
-          <input
-            id="email"
-            type="email"
-            className="odontoInputr"
-            placeholder="Enter your Email"
-          />
+         <input
+              id="email"
+              type="email"
+              className="odontoInputr"
+              placeholder="Enter your Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
           <label className="odontoLabelr" htmlFor="password">
             Password
@@ -40,6 +76,8 @@ export default function LoginPage() {
               type={showPassword ? "text" : "password"}
               className="odontoInputr passwordInputr"
               placeholder="********************"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <button
               type="button"
@@ -60,7 +98,7 @@ export default function LoginPage() {
             </button>
           </div>
 
-          <button type="submit" className="loginBtnr">
+          <button type="submit" className="loginBtnr" >
             Login
           </button>
 

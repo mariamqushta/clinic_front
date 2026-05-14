@@ -1,46 +1,37 @@
-import {React,useState,useEffect} from 'react'
-import Navbar from '../components/Navbar'
-import Side_Menu from '../components/SideMenu1';
-import demoAppointments from '../models/Appointmentele';
+import { useEffect, useState } from "react";
+import {
+  getDoctorAppointments,
+  acceptAppointment,
+  rejectAppointment,
+} from "../api/appointmentApi";
+import Side_Menu from "../components/SideMenu1";
 
 function AppointmentsDr() {
-
-const [search, setSearch] = useState("");
-const [appointments, setAppointments] = useState([]);
-const [activeTab, setActiveTab] = useState(
+  const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState(
     localStorage.getItem("tab") || "upcoming"
   );
+  const [appointments, setAppointments] = useState([]);
 
-  useEffect(() => {
-    localStorage.setItem("tab", activeTab);
-  }, [activeTab]);
+useEffect(() => {
+  const load = async () => {
+    try {
+      const doctorId = localStorage.getItem("doctorId");
 
-  useEffect(() => {
-    const loadData = () => {
-      const stored =
-        JSON.parse(localStorage.getItem("appointments")) || [];
+      if (!doctorId) {
+        console.log("NO DOCTOR ID");
+        return;
+      }
 
-   const mergedMap = new Map();
+      const data = await getDoctorAppointments(doctorId);
+      setAppointments(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-// add demo first
-    demoAppointments.forEach((app) => {
-    mergedMap.set(app.id, app);
-    });
-
-    // override with stored (IMPORTANT)
-    stored.forEach((app) => {
-    mergedMap.set(app.id, app);
-    });
-
-    setAppointments(Array.from(mergedMap.values()));
-        };
-
-    loadData();
-    window.addEventListener("focus", loadData);
-
-    return () => window.removeEventListener("focus", loadData);
-  }, []);
-
+  load();
+}, []);
   const statusStyles = {
     pending: { backgroundColor: "#FFF6D4", color: "#C5A457" },
     confirmed: { backgroundColor: "#D8FFE0", color: "#46B270" },
@@ -54,8 +45,8 @@ const [activeTab, setActiveTab] = useState(
   today.setHours(0, 0, 0, 0);
 
   const filteredAppointments = appointments.filter((app) => {
-   const [year, month, day] = app.date.split("-");
-   const appDate = new Date(year, month - 1, day);
+   const appDate = new Date(app.date);
+   appDate.setHours(0, 0, 0, 0);
 
     switch (activeTab) {
       case "upcoming":
@@ -71,7 +62,7 @@ const [activeTab, setActiveTab] = useState(
         );
 
       case "canceled":
-        return app.status === "canceled";
+       return app.status === "cancelled";
 
       default:
         return false;
@@ -118,24 +109,37 @@ const doneCount = appointments.filter(
 ).length;
 
 
-const handleAccept = (id) => {
-  const updated = appointments.map((app) =>
-    app.id === id ? { ...app, status: "confirmed" } : app
-  );
+const handleAccept = async (id) => {
+  try {
+    await acceptAppointment(id);
 
-  setAppointments(updated);
-  localStorage.setItem("appointments", JSON.stringify(updated));
+    setAppointments((prev) =>
+      prev.map((app) =>
+        app._id === id
+          ? { ...app, status: "confirmed" }
+          : app
+      )
+    );
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-const handleReject = (id) => {
-  const updated = appointments.map((app) =>
-    app.id === id ? { ...app, status: "rejected" } : app
-  );
+const handleReject = async (id) => {
+  try {
+    await rejectAppointment(id);
 
-  setAppointments(updated);
-  localStorage.setItem("appointments", JSON.stringify(updated));
+    setAppointments((prev) =>
+      prev.map((app) =>
+        app._id === id
+          ? { ...app, status: "cancelled" }
+          : app
+      )
+    );
+  } catch (err) {
+    console.log(err);
+  }
 };
-
   return (
       <div className="container-fluid">
     <div className="row">
@@ -225,40 +229,59 @@ const handleReject = (id) => {
 
 
 
-     {searchedAppointments.map((app) => (
-  <div key={app.id} className="container divappointent rounded rounded-4 card p-1 my-3">
-  <div className='d-flex justify-content-between p-3' >
-  <div>
-    <p> <span className='fw-semibold'>Dr:</span> {app.doctorName}</p>
-    <p> <span className='fw-semibold '>service:</span> {app.service}</p>
-    <p className='' ><span className=' fw-semibold'> Date:</span> {new Date(app.date).toDateString()} - {app.time}</p>
-       <span
-        className="px-4 py-3 rounded rounded-3 my-3 text-capitalize fw-semibold"
-        style={statusStyles[app.status]}
+    {searchedAppointments.map((app) => (
+  <div
+    key={app._id}
+    className="container divappointent rounded rounded-4 card p-1 my-3"
+  >
+    <div className="d-flex justify-content-between p-3">
+      <div>
+        <p>
+          <span className="fw-semibold">Patient:</span>{" "}
+          {app.patientId?.name}
+        </p>
+
+        <p>
+          <span className="fw-semibold">Email:</span>{" "}
+          {app.patientId?.email}
+        </p>
+
+        <p>
+          <span className="fw-semibold">Date:</span>{" "}
+          {new Date(app.date).toLocaleDateString()} -{" "}
+          {new Date(app.date).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </p>
+
+        <span
+          className="px-4 py-3 rounded rounded-3 my-3 text-capitalize fw-semibold"
+          style={statusStyles[app.status]}
         >
-        {app.status}
+          {app.status}
         </span>
-        </div>
-   <div>
-{activeTab === "upcoming" && app.status === "pending" && (
-  <>
-    <button
-      className="px-4 py-3 rounded rounded-3 my-3 text-capitalize fw-semibold Accept"
-      onClick={() => handleAccept(app.id)}
-    >
-      Accept
-    </button>
+      </div>
 
-    <button
-      className="px-4 py-3 rounded rounded-3 my-3 text-capitalize fw-semibold mx-2 Reject"
-      onClick={() => handleReject(app.id)}
-    >
-      Reject
-    </button>
-  </>
-)}
+      <div>
+        {activeTab === "upcoming" && app.status === "pending" && (
+          <>
+            <button
+              className="px-4 py-3 rounded rounded-3 my-3 text-capitalize fw-semibold Accept"
+              onClick={() => handleAccept(app._id)}
+            >
+              Accept
+            </button>
 
-    </div>
+            <button
+              className="px-4 py-3 rounded rounded-3 my-3 text-capitalize fw-semibold mx-2 Reject"
+              onClick={() => handleReject(app._id)}
+            >
+              Reject
+            </button>
+          </>
+        )}
+      </div>
     </div>
   </div>
 ))}

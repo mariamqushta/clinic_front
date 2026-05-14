@@ -2,11 +2,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaFacebookF, FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { loginPatient } from "../api/authApi";
+import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -43,21 +46,45 @@ export default function LoginPage() {
     setTouched((prev) => ({ ...prev, [name]: true }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    setTouched({
-      email: true,
-      password: true,
+  setTouched({
+    email: true,
+    password: true,
+  });
+
+  const isEmailValid = emailRegex.test(form.email.trim());
+  const isPasswordValid = form.password.trim().length >= 6;
+
+  if (!isEmailValid || !isPasswordValid) return;
+
+  try {
+    const data = await loginPatient({
+      email: form.email,
+      password: form.password,
     });
 
-    const isEmailValid = emailRegex.test(form.email.trim());
-    const isPasswordValid = form.password.trim().length >= 6;
+    console.log("LOGIN SUCCESS:", data);
 
-    if (!isEmailValid || !isPasswordValid) return;
+  
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+    }
 
     alert("Login successful");
-  };
+
+
+    navigate("/home");
+  } catch (error) {
+    console.log(error);
+
+    alert(
+      error.response?.data?.message ||
+        "Login failed"
+    );
+  }
+};
 
   return (
     <div className="login-page">

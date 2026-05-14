@@ -31,9 +31,9 @@ function Side_Menu() {
         </Link>
 
         <Link
-          to="/appointments"
+          to="/doctor/appointments"
           className={`side-link ${
-            location.pathname === "/AppointmentsDr" ? "active" : ""
+            location.pathname === "/doctor/appointments" ? "active" : ""
           }`}
         >
           <FaCalendarAlt /> Appointments
@@ -48,20 +48,19 @@ function Side_Menu() {
           <FaComments /> Chats
         </Link>
 
-        <Link
-          to="/profile"
+         <Link
+          to="/doctor/profile"
           className={`side-link ${
-            location.pathname === "/profile" ? "active" : ""
+            location.pathname === "/doctor/profile" ? "active" : ""
           }`}
         >
           <FaUserCircle /> Profile
         </Link>
 
-        <Link
-          to="/profile"
-          className={`side-link ${
-            location.pathname === "/Logout" ? "active" : ""
-          }`}
+         <Link
+          to="/select"
+          onClick={() => localStorage.clear()}
+          className="side-link"
         >
           <FaSignOutAlt /> Log out
         </Link>

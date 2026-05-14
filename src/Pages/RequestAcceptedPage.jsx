@@ -30,7 +30,7 @@ export default function RequestAcceptedPage() {
         <button
           type="button"
           className="result-btn result-btn--success"
-          onClick={() => navigate("/home")}
+          onClick={() => navigate("/profile")}
         >
           Start
         </button>

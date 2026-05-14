@@ -1,4 +1,7 @@
 import "./Profile.css";
+import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 import {
   FaTachometerAlt,
   FaCalendarAlt,
@@ -9,77 +12,209 @@ import {
 } from "react-icons/fa";
 
 function Profile() {
+  const navigate = useNavigate();
+
+  const [user, setUser] = useState(null);
+  const [editing, setEditing] = useState(false);
+  const [backupUser, setBackupUser] = useState(null);
+  const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await api.get("/auth/profile");
+        setUser(res.data.data.user);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  const handleChange = (e) => {
+    setUser((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  // ✅ avatar upload (SAFE)
+  const handleImageUpload = (file) => {
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onloadend = async () => {
+      const base64 = reader.result;
+
+      try {
+        const res = await api.patch(`/users/${user._id}`, {
+            avatarUrl: base64,
+          });
+
+        setUser(res.data.data.user);
+      } catch (err) {
+        console.log(err);
+        alert("Upload failed");
+      }
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const handleSave = async () => {
+    if (!editing) {
+      setBackupUser(user);
+      setEditing(true);
+      return;
+    }
+
+    try {
+      const res = await api.patch(`/users/${user._id}`, {
+          name: user.name,
+          phone: user.phone,
+          avatarUrl: user.avatarUrl,
+        });
+
+      setUser(res.data.data.user);
+      setEditing(false);
+
+      alert("Profile updated!");
+    } catch (err) {
+      console.log(err);
+
+      // rollback
+      if (backupUser) setUser(backupUser);
+
+      alert("Update failed");
+    }
+  };
+
+  if (!user) return <p>Loading...</p>;
+
   return (
     <div className="layout">
 
-      {/* Sidebar */}
+      {/* SIDEBAR */}
       <div className="sidebar">
         <h1 className="logo">Odonto</h1>
 
         <ul>
-          <li><FaTachometerAlt /> Dashboard</li>
-          <li><FaCalendarAlt /> Appointments</li>
-          <li><FaComments /> Chats</li>
+          <li onClick={() => navigate("/home")} style={{ cursor: "pointer" }}>
+            <FaTachometerAlt /> Dashboard
+          </li>
 
-          <li className="active">
+          <li onClick={() => navigate("/appointments")} style={{ cursor: "pointer" }}>
+            <FaCalendarAlt /> Appointments
+          </li>
+
+          <li onClick={() => navigate("/chat")} style={{ cursor: "pointer" }}>
+            <FaComments /> Chats
+          </li>
+
+          <li className="active" onClick={() => navigate("/profile")} style={{ cursor: "pointer" }}>
             <FaUserCircle /> Profile
           </li>
 
-          <li className="logout">
+          <li
+            className="logout"
+            onClick={() => {
+              localStorage.clear();
+              navigate("/login");
+            }}
+            style={{ cursor: "pointer" }}
+          >
             <FaSignOutAlt /> Log out
           </li>
         </ul>
       </div>
 
-      {/* Content */}
+      {/* CONTENT */}
       <div className="content">
 
-        {/* Top Card */}
         <div className="profile-card">
 
           <div className="doctor-image">
-            <FaUserCircle className="doctor-icon" />
+
+            {user.avatarUrl ? (
+              <img
+                src={user.avatarUrl}
+                alt="user"
+                onClick={() => fileInputRef.current?.click()}
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  borderRadius: "50%",
+                  cursor: "pointer"
+                }}
+              />
+            ) : (
+              <FaUserCircle
+                className="doctor-icon"
+                onClick={() => fileInputRef.current?.click()}
+                style={{ cursor: "pointer" }}
+              />
+            )}
+
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              accept="image/*"
+              onChange={(e) => handleImageUpload(e.target.files[0])}
+            />
           </div>
 
           <div className="doctor-info">
+
             <div className="top-row">
-              <h3>Dr. Ahmed Mohamed</h3>
-              <FaPen className="edit-icon" />
+              <h3>{user.name}</h3>
+
+              <FaPen
+                className="edit-icon"
+                onClick={() => {
+                  setBackupUser(user);
+                  setEditing(true);
+                }}
+                style={{ cursor: "pointer" }}
+              />
             </div>
 
-            <h4>Orthodontics</h4>
-
-            <p>
-              10+ years of experience in braces and smile correction.
-              Dedicated to providing the best dental care.
-            </p>
+            <h4>{user.role}</h4>
           </div>
 
         </div>
 
-        {/* Form */}
+        {/* FORM */}
         <div className="form">
 
           <label>Name</label>
-          <input type="text" defaultValue="Ahmed Mohamed Ali AMR" />
+          <input
+            name="name"
+            value={user.name || ""}
+            onChange={handleChange}
+            disabled={!editing}
+          />
 
           <label>Email</label>
-          <input type="email" defaultValue="ahm@gmail.com" />
+          <input value={user.email || ""} disabled />
 
           <label>Phone</label>
-          <input type="text" defaultValue="01123456788" />
+          <input
+            name="phone"
+            value={user.phone || ""}
+            onChange={handleChange}
+            disabled={!editing}
+          />
 
-          <label>specialty</label>
-          <input type="text" defaultValue="Orthodontics" />
-
-          <button className="save-btn">
-            Save Changes
+          <button className="save-btn" onClick={handleSave}>
+            {editing ? "Save Changes" : "Edit Profile"}
           </button>
 
         </div>
 
       </div>
-
     </div>
   );
 }

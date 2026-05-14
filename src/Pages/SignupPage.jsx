@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaFacebookF, FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import API from "../api/api";
 import "./SignupPage.css";
 
 function EyeIcon({ open }) {
@@ -81,6 +83,7 @@ function GoogleMark() {
 }
 
 export default function SignupPage() {
+  const navigate = useNavigate();
   const [submitted, setSubmitted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -125,10 +128,33 @@ export default function SignupPage() {
     setForm((s) => ({ ...s, [key]: val }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSubmitted(true);
+
+const payload = {
+  name: `${form.firstName} ${form.lastName}`,
+  email: form.email,
+  password: form.password,
+};
+
+  try {
+    const res = await API.post("/auth/register", payload);
+
+    console.log("SUCCESS:", res.data);
+
+   alert("Account created successfully 🎉");
+   localStorage.setItem("role", "patient");
+   navigate("/home");
+
+    // optional redirect
+    // navigate("/login");
+
+  } catch (err) {
+    console.log("ERROR:", err.response?.data || err.message);
+    alert(err.response?.data?.message || "Signup failed");
+  }
+};
 
   return (
     <div className="signup-page">

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { signupPatient } from "../api/authApi";
 import "./DoctorSignupPage.css";
 
 export default function DoctorSignupPage() {
@@ -28,17 +29,29 @@ export default function DoctorSignupPage() {
     setLicenseFile(e.target.files?.[0] || null);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
 
-    console.log({
-      ...formData,
-      licenseFile,
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await signupPatient({
+      name: `${formData.firstName} ${formData.lastName}`,
+      email: formData.email,
+      password: formData.password,
+      role: "doctor",
     });
 
-    navigate("/under-review");
-  };
+    console.log("Doctor created:", res);
 
+    localStorage.setItem("role", "doctor");
+
+    navigate("/request-accepted");
+  } catch (err) {
+    console.log("ERROR:", err.response?.data || err.message);
+    alert(err.response?.data?.message || "Doctor signup failed");
+  }
+};
   return (
     <div className="doctor-signup-page">
       <section className="doctor-signup-left">
