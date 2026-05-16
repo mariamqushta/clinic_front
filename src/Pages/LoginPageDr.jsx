@@ -20,7 +20,7 @@ const handleSubmit = async (e) => {
 
   console.log("LOGIN RESPONSE:", res);
 
-  const user = res?.data;
+  const user = res?.data?.user;
   const token = res?.access_token;
 
   if (!user) {
