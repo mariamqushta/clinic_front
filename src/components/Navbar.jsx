@@ -1,0 +1,81 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../api/api";
+import '../App.css';
+
+function Navbar() {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await api.get("/auth/profile");
+        setUser(res.data.data.user);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  return (
+    <nav className="navbar navbar-expand-lg mt-3">
+      <div className="container">
+
+        <a className="navbar-brand headerstyle fst-italic h1 fs-2" href="/home">
+          Odonto
+        </a>
+
+        <div className="collapse navbar-collapse">
+
+          <ul className="navbar-nav m-auto mb-2 pb-3 mb-lg-0">
+
+            <li className="nav-item">
+              <a className="nav-link active navbarli1" href="/home">Home</a>
+            </li>
+
+            <li className="nav-item">
+              <a className="nav-link navbarli1 text-black" href="/Appointments">Appointments</a>
+            </li>
+
+            <li className="nav-item">
+              <a className="nav-link navbarli1 text-black" href="/Chat">Chat</a>
+            </li>
+
+            <li className="nav-item">
+              <a className="nav-link navbarli1 text-black" href="#">AI Assistant</a>
+            </li>
+
+          </ul>
+
+          {/* USER SECTION */}
+          <div
+            style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "10px" }}
+            onClick={() => navigate("/profile")}
+          >
+
+            <span className="navbar-text">
+              {user?.name || "Loading..."}
+            </span>
+
+            <img
+              src={
+                user?.avatarUrl ||
+                "/female-person-default-profile-no-260nw-2069253950.webp"
+              }
+              className="rounded-circle navimg"
+              alt="profile"
+              style={{ width: "40px", height: "40px", objectFit: "cover" }}
+            />
+
+          </div>
+
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+export default Navbar;

@@ -1,0 +1,294 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #ffffff;
+  overflow-x: hidden;
+}
+
+.doctor-signup-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  background: #fff;
+  overflow-x: hidden;
+}
+
+/* LEFT SIDE */
+.doctor-signup-left {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    #2c6ea4 0%,
+    #051527 38%,
+    #051527 70%,
+    #2c6ea4 100%
+  );
+  clip-path: polygon(0 0, 8% 0, 100% 50%, 8% 100%, 0 100%);
+}
+
+.doctor-signup-left::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 25% 50%,
+    rgba(255, 255, 255, 0.08),
+    transparent 45%
+  );
+}
+
+.doctor-signup-left__content {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  text-align: center;
+  padding: 0.8rem;
+}
+
+.doctor-signup-left__content h1 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.15rem, 1.6vw, 1.8rem);
+  font-weight: 500;
+}
+
+.doctor-signup-left__content strong {
+  font-weight: 700;
+}
+
+/* RIGHT SIDE */
+.doctor-signup-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem;
+}
+
+.doctor-signup-form {
+  width: 90%;
+}
+
+.doctor-signup-mobile-title {
+  display: none;
+}
+
+.doctor-signup-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 8px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field--full {
+  grid-column: 1 / -1;
+}
+
+.field label {
+  margin-bottom: 3px;
+  font-size: 0.7rem;
+  color: #111;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  height: 36px;
+  border: 0;
+  outline: none;
+  border-radius: 10px;
+  background: #f4f4f4;
+  padding: 0 10px;
+  font-size: 0.76rem;
+  color: #222;
+}
+
+.field input::placeholder {
+  color: #b8b8b8;
+}
+
+/* SELECT */
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 34px;
+  cursor: pointer;
+}
+
+.select-wrapper::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid #9a9a9a;
+  border-bottom: 2px solid #9a9a9a;
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+/* PASSWORD */
+.password-wrap {
+  position: relative;
+}
+
+.password-wrap input {
+  padding-right: 34px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: #9a9a9a;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle svg {
+  width: 13px;
+  height: 13px;
+  display: block;
+}
+
+/* HINT */
+.hint {
+  margin: 2px 0 0;
+  text-align: center;
+  font-size: 0.64rem;
+  color: #9a9a9a;
+}
+
+/* UPLOAD */
+.upload-box {
+  display: block;
+  border: 2px dashed #b9b9b9;
+  border-radius: 7px;
+  background: #f3f4ff;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.upload-box input {
+  display: none;
+}
+
+.upload-box__content {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 0.7rem;
+  padding: 0 8px;
+  text-align: center;
+}
+
+.upload-icon {
+  font-size: 0.85rem;
+}
+
+.file-name {
+  margin-top: 3px;
+  font-size: 0.62rem;
+  color: #666;
+}
+
+/* BUTTON */
+.submit-btn {
+  width: 100%;
+  max-width: 240px;
+  margin: 9px auto 0;
+  display: block;
+  border: 0;
+  border-radius: 999px;
+  min-height: 34px;
+  background: #155793;
+  color: #fff;
+  font-family: Georgia, serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background: #12497b;
+}
+
+.review-note {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 0.62rem;
+  color: #111;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .doctor-signup-page {
+    grid-template-columns: 1fr;
+  }
+
+  .doctor-signup-left {
+    clip-path: none;
+    min-height: 120px;
+  }
+
+  .doctor-signup-left__content h1 {
+    font-size: clamp(1.1rem, 3.8vw, 1.6rem);
+  }
+
+  .doctor-signup-right {
+    padding: 0.6rem;
+  }
+
+  .doctor-signup-form {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  .doctor-signup-grid {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .field input,
+  .field select {
+    height: 36px;
+  }
+
+  .submit-btn {
+    max-width: 100%;
+  }
+
+  .doctor-signup-left {
+    min-height: 100px;
+  }
+
+  .doctor-signup-left__content h1 {
+    font-size: clamp(1rem, 4.5vw, 1.35rem);
+  }
+}
