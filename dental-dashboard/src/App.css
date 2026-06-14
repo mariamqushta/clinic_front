@@ -1,0 +1,155 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+background:#F5F6FD;
+}
+
+.app{
+display:flex;
+height:100vh;
+}
+
+/* Sidebar */
+
+.sidebar{
+width:280px;
+background:white;
+padding:40px;
+border-right:2px solid #d7d7d7;
+}
+
+.logo{
+font-size:52px;
+font-style:italic;
+font-weight:300;
+color:#21518b;
+margin-bottom:90px;
+}
+
+.sidebar ul{
+list-style:none;
+}
+
+.sidebar li{
+display:flex;
+align-items:center;
+gap:15px;
+margin-bottom:45px;
+font-size:20px;
+color:#23518b;
+cursor:pointer;
+}
+
+.active{
+font-weight:bold;
+}
+
+.logout{
+color:#ef566d;
+}
+
+/* Dashboard */
+
+.dashboard{
+flex:1;
+padding:25px 50px;
+}
+
+.topBar{
+display:flex;
+justify-content:flex-end;
+gap:20px;
+font-size:20px;
+margin-bottom:40px;
+}
+
+/* Cards */
+
+.cards{
+display:flex;
+gap:35px;
+}
+
+.card{
+width:260px;
+height:170px;
+background:#0B4C8C;
+border-radius:25px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+color:white;
+}
+
+.card h3{
+font-size:22px;
+margin-bottom:25px;
+}
+
+.card h2{
+font-size:26px;
+}
+
+/* Titles */
+
+.title{
+margin-top:45px;
+margin-bottom:20px;
+font-size:24px;
+font-weight:700;
+color:#194E8E;
+}
+
+/* Table */
+
+.tableContainer{
+background:white;
+border:1px solid #8aa4c4;
+padding:25px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+background:#f4f5fb;
+padding:18px;
+font-size:18px;
+}
+
+td{
+padding:18px;
+text-align:center;
+border-bottom:1px solid #ddd;
+}
+
+.done{
+background:#d7ffd8;
+padding:6px 35px;
+border-radius:15px;
+color:green;
+}
+
+.pending{
+background:#fff5d4;
+padding:6px 25px;
+border-radius:15px;
+color:#aa8a18;
+}
+
+/* Chart */
+
+.chartContainer{
+background:white;
+border:1px solid #8aa4c4;
+padding:20px;
+height:380px;
+}
