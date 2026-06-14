@@ -3,6 +3,7 @@ import {
   getDoctorAppointments,
   acceptAppointment,
   rejectAppointment,
+  completeAppointment,
 } from "../api/appointmentApi";
 import Side_Menu from "../components/SideMenu1";
 
@@ -57,8 +58,8 @@ useEffect(() => {
 
       case "past":
         return (
-          appDate < today &&
-          ["completed", "missed"].includes(app.status)
+          ["completed", "missed"].includes(app.status) ||
+          (appDate < today && ["pending", "confirmed"].includes(app.status))
         );
 
       case "canceled":
@@ -133,6 +134,22 @@ const handleReject = async (id) => {
       prev.map((app) =>
         app._id === id
           ? { ...app, status: "cancelled" }
+          : app
+      )
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const handleComplete = async (id) => {
+  try {
+    await completeAppointment(id);
+
+    setAppointments((prev) =>
+      prev.map((app) =>
+        app._id === id
+          ? { ...app, status: "completed" }
           : app
       )
     );
@@ -227,11 +244,15 @@ const handleReject = async (id) => {
 
        </div>
 
-
-
-    {searchedAppointments.map((app) => (
-  <div
-    key={app._id}
+      {searchedAppointments.length === 0 ? (
+        <div className="text-center my-5 py-5 text-muted">
+          <h4>No appointments found for {activeTab}</h4>
+          <p>You have no {activeTab} appointments at this time.</p>
+        </div>
+      ) : 
+        searchedAppointments.map((app) => (
+          <div
+            key={app._id}
     className="container divappointent rounded rounded-4 card p-1 my-3"
   >
     <div className="d-flex justify-content-between p-3">
@@ -280,6 +301,16 @@ const handleReject = async (id) => {
               Reject
             </button>
           </>
+        )}
+
+        {app.status === "confirmed" && (
+          <button
+            className="px-4 py-3 rounded rounded-3 my-3 text-capitalize fw-semibold text-light"
+            style={{ backgroundColor: "#46B270", border: "none" }}
+            onClick={() => handleComplete(app._id)}
+          >
+            Mark as Completed
+          </button>
         )}
       </div>
     </div>

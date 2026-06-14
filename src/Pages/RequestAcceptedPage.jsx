@@ -30,7 +30,14 @@ export default function RequestAcceptedPage() {
         <button
           type="button"
           className="result-btn result-btn--success"
-          onClick={() => navigate("/profile")}
+          onClick={() => {
+            const role = localStorage.getItem("role");
+            if (role === "doctor") {
+              navigate("/doctor/profile");
+            } else {
+              navigate("/profile");
+            }
+          }}
         >
           Start
         </button>
