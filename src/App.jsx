@@ -16,7 +16,7 @@ import RequestAcceptedPage from "./Pages/RequestAcceptedPage";
 import RequestRejectedPage from "./Pages/RequestRejectedPage";
 import SelectRole from "./Pages/SelectRole";
 import Chat1PagePatient from "./Pages/Chat1PagePatient";
-
+import Chat1PageDoctor from "./Pages/Chat1PageDoctor";
 
 // 🔐 get role helper
 const getRole = () => localStorage.getItem("role");
@@ -24,13 +24,13 @@ const getRole = () => localStorage.getItem("role");
 // 🔒 guards
 const PatientRoute = ({ children }) => {
   const role = getRole();
-  if (role !== "patient") return <Navigate to="/select" />;
+  if (role !== "patient") return <Navigate to="/select" replace />;
   return children;
 };
 
 const DoctorRoute = ({ children }) => {
   const role = getRole();
-  if (role !== "doctor") return <Navigate to="/select" />;
+  if (role !== "doctor") return <Navigate to="/select" replace />;
   return children;
 };
 
@@ -38,9 +38,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* 👉 first screen */}
-        <Route path="/" element={<Navigate to="/select" />} />
+        <Route path="/" element={<Navigate to="/select" replace />} />
         <Route path="/select" element={<SelectRole />} />
 
         {/* 👉 auth pages (both can access) */}
@@ -54,6 +53,7 @@ function App() {
         <Route path="/request-accepted" element={<RequestAcceptedPage />} />
         <Route path="/request-rejected" element={<RequestRejectedPage />} />
         <Route path="/chat1-patient" element={<Chat1PagePatient />} />
+        <Route path="/doctor-chat-1" element={<Chat1PageDoctor />} />
 
         {/* 👤 PATIENT ROUTES */}
         <Route
@@ -82,14 +82,15 @@ function App() {
             </PatientRoute>
           }
         />
-           <Route
-            path="/profile"
-            element={
-              <PatientRoute>
-                <Profile />
-              </PatientRoute>
-            }
-          />
+
+        <Route
+          path="/profile"
+          element={
+            <PatientRoute>
+              <Profile />
+            </PatientRoute>
+          }
+        />
 
         {/* 👨‍⚕️ DOCTOR ROUTES */}
         <Route
@@ -111,8 +112,7 @@ function App() {
         />
 
         {/* fallback */}
-        <Route path="*" element={<Navigate to="/select" />} />
-
+        <Route path="*" element={<Navigate to="/select" replace />} />
       </Routes>
     </BrowserRouter>
   );
