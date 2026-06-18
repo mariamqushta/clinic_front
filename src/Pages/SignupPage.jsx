@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaFacebookF, FaEye, FaEyeSlash } from "react-icons/fa";
@@ -143,7 +144,7 @@ const payload = {
 
     console.log("SUCCESS:", res.data);
 
-   alert("Account created successfully 🎉");
+   toast.success("Account created successfully 🎉");
    localStorage.setItem("role", "patient");
    navigate("/home");
 
@@ -152,7 +153,7 @@ const payload = {
 
   } catch (err) {
     console.log("ERROR:", err.response?.data || err.message);
-    alert(err.response?.data?.message || "Signup failed");
+    toast.error(err.response?.data?.message || "Signup failed");
   }
 };
 
@@ -289,19 +290,16 @@ const payload = {
 
             {/* Social */}
             <div className="socials">
-              <button type="button" className="social-btn facebook"
-                 aria-label="Facebook">
-                 <FaFacebookF />
-            </button>
-
-
-            <button
-              type="button"
-              className="social-btn google-btn"
-              aria-label="Google"
-            >
-              <FcGoogle />
-            </button>
+              <button
+                type="button"
+                className="social-btn google-btn"
+                aria-label="Google"
+                onClick={() => {
+                  window.location.href = "http://localhost:3000/api/v1/oauth/google";
+                }}
+              >
+                <FcGoogle />
+              </button>
             </div>
           </form>
         </div>

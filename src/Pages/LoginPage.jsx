@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaFacebookF, FaEye, FaEyeSlash } from "react-icons/fa";
@@ -26,15 +27,15 @@ export default function LoginPage() {
     touched.email && form.email.trim() === ""
       ? "This field is required"
       : touched.email && !emailRegex.test(form.email.trim())
-      ? "invalid email address"
-      : "";
+        ? "invalid email address"
+        : "";
 
   const passwordError =
     touched.password && form.password.trim() === ""
       ? "This field is required"
       : touched.password && form.password.length < 6
-      ? "Incorrect password"
-      : "";
+        ? "Incorrect password"
+        : "";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,45 +47,37 @@ export default function LoginPage() {
     setTouched((prev) => ({ ...prev, [name]: true }));
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  setTouched({
-    email: true,
-    password: true,
-  });
-
-  const isEmailValid = emailRegex.test(form.email.trim());
-  const isPasswordValid = form.password.trim().length >= 6;
-
-  if (!isEmailValid || !isPasswordValid) return;
-
-  try {
-    const data = await loginPatient({
-      email: form.email,
-      password: form.password,
+    setTouched({
+      email: true,
+      password: true,
     });
 
-    console.log("LOGIN SUCCESS:", data);
+    const isEmailValid = emailRegex.test(form.email.trim());
+    const isPasswordValid = form.password.trim().length >= 6;
 
-  
-    if (data.token) {
-      localStorage.setItem("token", data.token);
+    if (!isEmailValid || !isPasswordValid) return;
+
+    try {
+      const data = await loginPatient({
+        email: form.email,
+        password: form.password,
+      });
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+
+      toast.success("Login successful");
+      navigate("/home");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Login failed"
+      );
     }
-
-    alert("Login successful");
-
-
-    navigate("/home");
-  } catch (error) {
-    console.log(error);
-
-    alert(
-      error.response?.data?.message ||
-        "Login failed"
-    );
-  }
-};
+  };
 
   return (
     <div className="login-page">
@@ -104,9 +97,7 @@ const handleSubmit = async (e) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 placeholder="Enter your Email"
-                className={`form-control auth-input ${
-                  emailError ? "is-invalid-custom" : ""
-                }`}
+                className={`form-control auth-input ${emailError ? "is-invalid-custom" : ""}`}
               />
               <div className="field-error">{emailError || "\u00A0"}</div>
             </div>
@@ -122,9 +113,7 @@ const handleSubmit = async (e) => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   placeholder="********************"
-                  className={`form-control auth-input ${
-                    passwordError ? "is-invalid-custom" : ""
-                  }`}
+                  className={`form-control auth-input ${passwordError ? "is-invalid-custom" : ""}`}
                 />
 
                 <button
@@ -143,7 +132,7 @@ const handleSubmit = async (e) => {
             <button
               type="button"
               className="forgot-link-btn"
-              onClick={() => alert("Forgot password page not added yet")}
+              onClick={() => navigate("/forgot-password")}
             >
               Forget password?
             </button>
@@ -162,16 +151,11 @@ const handleSubmit = async (e) => {
           <div className="social-row">
             <button
               type="button"
-              className="social-btn facebook"
-              aria-label="Facebook"
-            >
-              <FaFacebookF color="#fff" />
-            </button>
-
-            <button
-              type="button"
               className="social-btn google-btn"
               aria-label="Google"
+              onClick={() => {
+                window.location.href = "http://localhost:3000/api/v1/oauth/google?role=patient";
+              }}
             >
               <FcGoogle />
             </button>

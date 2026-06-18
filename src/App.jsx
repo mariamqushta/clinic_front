@@ -17,6 +17,7 @@ import RequestRejectedPage from "./Pages/RequestRejectedPage";
 import SelectRole from "./Pages/SelectRole";
 import Chat1PagePatient from "./Pages/Chat1PagePatient";
 import Chat1PageDoctor from "./Pages/Chat1PageDoctor";
+import OAuthSuccess from "./Pages/OAuthSuccess";
 
 // 🔐 get role helper
 const getRole = () => localStorage.getItem("role");
@@ -54,6 +55,7 @@ function App() {
         <Route path="/request-rejected" element={<RequestRejectedPage />} />
         <Route path="/chat1-patient" element={<Chat1PagePatient />} />
         <Route path="/doctor-chat-1" element={<Chat1PageDoctor />} />
+        <Route path="/oauth-success" element={<OAuthSuccess />} />
 
         {/* 👤 PATIENT ROUTES */}
         <Route

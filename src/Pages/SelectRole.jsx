@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { FaUser } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +9,7 @@ function SelectRole() {
   const navigate = useNavigate();
 
 const handleContinue = () => {
-  if (!role) return alert("Select role");
+  if (!role) return toast.error("Select role");
 
   localStorage.setItem("role", role);
 

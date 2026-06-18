@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import toast from "react-hot-toast";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./ResetPassword.css";
+import { resetPassword } from "../api/authApi";
 
 function EyeIcon() {
   return (
@@ -33,20 +36,37 @@ export default function ResetPassword() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSubmit = (e) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const token = location.state?.token;
+
+  useEffect(() => {
+    if (!token) {
+      toast.error("No reset token found. Please start the forgot password process again.");
+      navigate("/forgot-password");
+    }
+  }, [token, navigate]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (newPassword.length < 8 || !/\d/.test(newPassword)) {
-      alert("Password must be 8+ characters and include a number");
+    if (newPassword.length < 8) {
+      toast.error("Password must be 8+ characters");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      alert("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
-    alert("Password reset successfully!");
+    try {
+      await resetPassword(token, newPassword);
+      toast.success("Password reset successfully! Please log in.");
+      navigate("/login");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to reset password.");
+    }
   };
 
   return (
