@@ -154,7 +154,7 @@ export default function LoginPage() {
               className="social-btn google-btn"
               aria-label="Google"
               onClick={() => {
-                window.location.href = "http://localhost:3000/api/v1/oauth/google";
+                window.location.href = "http://localhost:3000/api/v1/oauth/google?role=patient";
               }}
             >
               <FcGoogle />

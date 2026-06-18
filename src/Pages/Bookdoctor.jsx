@@ -6,7 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import Navbar from "../components/Navbar";
 import { createAppointment ,updateAppointment} from "../api/appointmentApi";
 import { getDoctorById } from "../api/doctorApi";
-import { FaLocationArrow } from "react-icons/fa";
+import { getDoctorReviews } from "../api/reviewApi";
+import { FaLocationArrow, FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function Book1() {
@@ -16,6 +17,7 @@ function Book1() {
 
   const editAppointment = location.state?.appointment;
   const [doctor, setDoctor] = useState(null);
+  const [reviewsData, setReviewsData] = useState({ averageRating: 0, reviews: [] });
   const [selectedTime, setSelectedTime] = useState(null);
   const [date, setDate] = useState(new Date());
   const [confirmed, setConfirmed] = useState(false);
@@ -27,16 +29,20 @@ function Book1() {
 
   // Load doctor from backend
   useEffect(() => {
-    const fetchDoctor = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getDoctorById(id);
-        setDoctor(data);
+        const [docData, revData] = await Promise.all([
+          getDoctorById(id),
+          getDoctorReviews(id).catch(() => ({ averageRating: 0, reviews: [] }))
+        ]);
+        setDoctor(docData);
+        if (revData) setReviewsData(revData);
       } catch (err) {
         console.log(err);
       }
     };
 
-    fetchDoctor();
+    fetchData();
   }, [id]);
 
   // Prefill edit
@@ -182,6 +188,11 @@ console.log("DOCTOR ID:", doctor?._id);
                 <h5 className="fw-bold my-3 bagemaincolor">
                   {doctor.specialization}
                 </h5>
+                <div className="d-flex align-items-center mb-3">
+                  <FaStar color="#FFD700" size={20} className="me-2" />
+                  <span className="fw-bold fs-5">{reviewsData.averageRating || "New"}</span>
+                  <span className="text-muted ms-2">({reviewsData.reviews.length} reviews)</span>
+                </div>
                 <p>{doctor.bio}</p>
               </div>
             </div>
@@ -248,11 +259,47 @@ console.log("DOCTOR ID:", doctor?._id);
 
         <div className="d-flex justify-content-center mt-4">
           <button
-            className="book-btn fs-5"
+            className="book-btn fs-5 mb-5"
             onClick={handleBooking}
           >
             Book
           </button>
+        </div>
+
+        {/* Reviews Section */}
+        <div className="card p-4 shadow-sm my-5">
+          <h3 className="fw-bold mb-4">Patient Reviews</h3>
+          
+          {reviewsData.reviews.length === 0 ? (
+            <p className="text-muted text-center py-4">No reviews yet for this doctor.</p>
+          ) : (
+            <div className="d-flex flex-column gap-3">
+              {reviewsData.reviews.map((rev) => (
+                <div key={rev._id} className="p-3 border rounded bg-light">
+                  <div className="d-flex align-items-center mb-2">
+                    <img 
+                      src={rev.patientId?.avatarUrl || "https://cdn-icons-png.flaticon.com/512/149/149071.png"} 
+                      alt="patient" 
+                      style={{ width: "40px", height: "40px", borderRadius: "50%", objectFit: "cover" }} 
+                      className="me-3"
+                    />
+                    <div>
+                      <h6 className="mb-0 fw-bold">{rev.patientId?.name || "Anonymous Patient"}</h6>
+                      <div className="text-warning mt-1">
+                        {[...Array(5)].map((_, i) => (
+                          <FaStar key={i} color={i < rev.rating ? "#FFD700" : "#e4e5e9"} size={14} />
+                        ))}
+                      </div>
+                    </div>
+                    <small className="ms-auto text-muted">
+                      {new Date(rev.createdAt).toLocaleDateString()}
+                    </small>
+                  </div>
+                  <p className="mb-0 mt-2 ms-5 text-secondary" style={{ fontSize: "15px" }}>{rev.comment}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaFacebookF, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { loginDoctor } from "../api/authApi";
 import "./LoginPageDr.css";
@@ -110,11 +110,15 @@ export default function LoginPage() {
           </div>
 
           <div className="socialRowr">
-            <button type="button" className="socialBtnr facebookBtnr">
-              <FaFacebookF />
-            </button>
-            <button type="button" className="socialBtnr googleBtnr">
-              <FcGoogle />
+            <button
+              type="button"
+              className="socialBtnr googleBtnr w-100"
+              style={{ padding: "10px", width: "100%", display: "flex", justifyContent: "center", alignItems: "center", gap: "8px" }}
+              onClick={() => {
+                window.location.href = "http://localhost:3000/api/v1/oauth/google?role=doctor";
+              }}
+            >
+              <FcGoogle size={24} /> Login with Google
             </button>
           </div>
         </form>
