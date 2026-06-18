@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import "./Profile.css";
 import { useEffect, useState, useRef } from "react";
 import Side_Menu from "../components/SideMenu1";
@@ -57,7 +58,7 @@ function DrProfile() {
         setDoctor(res.data.data.user);
       } catch (err) {
         console.log(err);
-        alert("Upload failed");
+        toast.error("Upload failed");
       }
     };
 
@@ -177,14 +178,14 @@ function DrProfile() {
                     setDoctor(res.data.data.user);
                     setEditing(false);
 
-                    alert("Profile updated!");
+                    toast.success("Profile updated!");
                   } catch (err) {
                     console.log(err);
 
                     // rollback if fail
                     if (backupDoctor) setDoctor(backupDoctor);
 
-                    alert("Update failed");
+                    toast.error("Update failed");
                   }
                 }}
               >

@@ -15,6 +15,7 @@ import UnderReviewPage from "./Pages/UnderReviewPage";
 import RequestAcceptedPage from "./Pages/RequestAcceptedPage";
 import RequestRejectedPage from "./Pages/RequestRejectedPage";
 import SelectRole from "./Pages/SelectRole";
+import OAuthSuccess from "./Pages/OAuthSuccess";
 
 
 // 🔐 get role helper
@@ -52,6 +53,7 @@ function App() {
         <Route path="/under-review" element={<UnderReviewPage />} />
         <Route path="/request-accepted" element={<RequestAcceptedPage />} />
         <Route path="/request-rejected" element={<RequestRejectedPage />} />
+        <Route path="/oauth-success" element={<OAuthSuccess />} />
 
         {/* 👤 PATIENT ROUTES */}
         <Route
@@ -80,14 +82,14 @@ function App() {
             </PatientRoute>
           }
         />
-           <Route
-            path="/profile"
-            element={
-              <PatientRoute>
-                <Profile />
-              </PatientRoute>
-            }
-          />
+        <Route
+          path="/profile"
+          element={
+            <PatientRoute>
+              <Profile />
+            </PatientRoute>
+          }
+        />
 
         {/* 👨‍⚕️ DOCTOR ROUTES */}
         <Route

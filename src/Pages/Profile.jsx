@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import "./Profile.css";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
@@ -56,7 +57,7 @@ function Profile() {
         setUser(res.data.data.user);
       } catch (err) {
         console.log(err);
-        alert("Upload failed");
+        toast.error("Upload failed");
       }
     };
 
@@ -80,14 +81,14 @@ function Profile() {
       setUser(res.data.data.user);
       setEditing(false);
 
-      alert("Profile updated!");
+      toast.success("Profile updated!");
     } catch (err) {
       console.log(err);
 
       // rollback
       if (backupUser) setUser(backupUser);
 
-      alert("Update failed");
+      toast.error("Update failed");
     }
   };
 

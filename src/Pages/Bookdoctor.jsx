@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
@@ -48,10 +49,10 @@ function Book1() {
 
 const handleBooking = async () => {
   if (!date || !selectedTime) {
-    return alert("Select date & time");
+    return toast.error("Select date & time");
   }
   if (!doctor?._id) {
-  alert("Doctor not loaded yet");
+  toast.error("Doctor not loaded yet");
   return;
   }
 
@@ -83,7 +84,7 @@ if (editAppointment && isEditable) {
     status: "pending",
   });
 } else {
-  alert("This appointment cannot be rescheduled anymore.");
+  toast.error("This appointment cannot be rescheduled anymore.");
   return;
 }
    console.log("DOCTOR OBJECT:", doctor);
@@ -93,7 +94,7 @@ console.log("DOCTOR ID:", doctor?._id);
     setConfirmed(true);
   } catch (err) {
     console.log("BOOK ERROR:", err.response?.data || err);
-    alert("Booking failed");
+    toast.error("Booking failed");
   }
 };
 

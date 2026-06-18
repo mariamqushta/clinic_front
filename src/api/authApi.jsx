@@ -36,3 +36,20 @@ export const forgotPassword = async (email) => {
 
   return response.data;
 };
+
+// Verify OTP
+export const verifyOTP = async (email, otp) => {
+  const response = await api.post("/auth/verify-otp", {
+    email,
+    otp,
+  });
+  return response.data;
+};
+
+// Reset Password
+export const resetPassword = async (token, password) => {
+  const response = await api.patch(`/auth/reset-password/${token}`, {
+    password,
+  });
+  return response.data;
+};

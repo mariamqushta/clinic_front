@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signupPatient } from "../api/authApi";
@@ -49,7 +50,7 @@ const handleSubmit = async (e) => {
     navigate("/request-accepted");
   } catch (err) {
     console.log("ERROR:", err.response?.data || err.message);
-    alert(err.response?.data?.message || "Doctor signup failed");
+    toast.error(err.response?.data?.message || "Doctor signup failed");
   }
 };
   return (
