@@ -15,8 +15,7 @@ import UnderReviewPage from "./Pages/UnderReviewPage";
 import RequestAcceptedPage from "./Pages/RequestAcceptedPage";
 import RequestRejectedPage from "./Pages/RequestRejectedPage";
 import SelectRole from "./Pages/SelectRole";
-import Chat1PagePatient from "./Pages/Chat1PagePatient";
-import Chat1PageDoctor from "./Pages/Chat1PageDoctor";
+import ChatContainer from "./Pages/ChatContainer";
 import OAuthSuccess from "./Pages/OAuthSuccess";
 
 // 🔐 get role helper
@@ -53,8 +52,7 @@ function App() {
         <Route path="/under-review" element={<UnderReviewPage />} />
         <Route path="/request-accepted" element={<RequestAcceptedPage />} />
         <Route path="/request-rejected" element={<RequestRejectedPage />} />
-        <Route path="/chat1-patient" element={<Chat1PagePatient />} />
-        <Route path="/doctor-chat-1" element={<Chat1PageDoctor />} />
+        <Route path="/chat" element={<ChatContainer />} />
         <Route path="/oauth-success" element={<OAuthSuccess />} />
 
         {/* 👤 PATIENT ROUTES */}

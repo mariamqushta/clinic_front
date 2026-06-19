@@ -41,7 +41,7 @@ function Navbar() {
             </li>
 
             <li className="nav-item">
-              <Link className="nav-link navbarli1 text-black" to="/Chat">Chat</Link>
+              <Link className="nav-link navbarli1 text-black" to="/chat">Chat</Link>
             </li>
 
             <li className="nav-item">

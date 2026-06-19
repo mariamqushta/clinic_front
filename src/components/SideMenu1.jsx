@@ -40,9 +40,9 @@ function Side_Menu() {
         </Link>
 
         <Link
-          to="/book/1"
+          to="/chat"
           className={`side-link ${
-            location.pathname.includes("/Chats") ? "active" : ""
+            location.pathname.includes("/chat") ? "active" : ""
           }`}
         >
           <FaComments /> Chats

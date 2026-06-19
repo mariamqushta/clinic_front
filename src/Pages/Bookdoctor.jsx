@@ -7,6 +7,7 @@ import Navbar from "../components/Navbar";
 import { createAppointment ,updateAppointment} from "../api/appointmentApi";
 import { getDoctorById, getDoctorAvailability } from "../api/doctorApi";
 import { getDoctorReviews } from "../api/reviewApi";
+import api from "../api/api";
 import { FaLocationArrow, FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -233,12 +234,22 @@ console.log("DOCTOR ID:", doctor?._id);
             </div>
 
             <div className="ms-auto me-5 mt-4">
-              <Link to="/chat">
-                <div className="arrow-wrapper p-4">
-                  <FaLocationArrow className="arrow dark" />
-                  <FaLocationArrow className="arrow light" />
-                </div>
-              </Link>
+              <div 
+                className="arrow-wrapper p-4" 
+                style={{ cursor: "pointer" }}
+                onClick={async () => {
+                  try {
+                    await api.post("/chats", { doctorId: id });
+                    navigate("/chat");
+                  } catch (err) {
+                    console.error("Chat error:", err.response?.data || err);
+                    toast.error(err.response?.data?.message || "Failed to start chat");
+                  }
+                }}
+              >
+                <FaLocationArrow className="arrow dark" />
+                <FaLocationArrow className="arrow light" />
+              </div>
             </div>
           </div>
         </div>
