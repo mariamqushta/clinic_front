@@ -282,6 +282,12 @@ const handleComplete = async (id) => {
         >
           {app.status}
         </span>
+
+        {app.notes && (
+          <div className="mt-3 p-2 bg-light border rounded" style={{maxWidth: "400px"}}>
+            <span className="fw-semibold">Patient Notes:</span> {app.notes}
+          </div>
+        )}
       </div>
 
       <div>

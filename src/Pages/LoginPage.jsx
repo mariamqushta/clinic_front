@@ -68,6 +68,7 @@ export default function LoginPage() {
 
       if (data.token) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("role", "patient");
       }
 
       toast.success("Login successful");

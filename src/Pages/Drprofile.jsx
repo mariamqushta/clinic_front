@@ -20,6 +20,21 @@ function DrProfile() {
       try {
         const res = await api.get("/auth/profile");
         const doc = res.data.data.user;
+
+        // Ensure default workingHours exists for older accounts
+        if (!doc.workingHours || Object.keys(doc.workingHours).length === 0) {
+          doc.workingHours = {
+            sun: { start: "09:00", end: "17:00", isOff: false },
+            mon: { start: "09:00", end: "17:00", isOff: false },
+            tue: { start: "09:00", end: "17:00", isOff: false },
+            wed: { start: "09:00", end: "17:00", isOff: false },
+            thu: { start: "09:00", end: "17:00", isOff: false },
+            fri: { start: "09:00", end: "17:00", isOff: false },
+            sat: { start: "09:00", end: "17:00", isOff: false },
+          };
+        }
+        if (!doc.slotDuration) doc.slotDuration = 30;
+
         setDoctor(doc);
 
         if (doc?._id) {
@@ -36,10 +51,22 @@ function DrProfile() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setDoctor((prev) => ({
       ...prev,
       [name]: value,
+    }));
+  };
+
+  const handleWorkingHoursChange = (day, field, value) => {
+    setDoctor((prev) => ({
+      ...prev,
+      workingHours: {
+        ...prev.workingHours,
+        [day]: {
+          ...prev.workingHours?.[day],
+          [field]: value,
+        },
+      },
     }));
   };
 
@@ -165,6 +192,50 @@ function DrProfile() {
                 disabled={!editing}
               />
 
+              <label>Slot Duration (minutes)</label>
+              <input
+                type="number"
+                name="slotDuration"
+                value={doctor.slotDuration || 30}
+                onChange={handleChange}
+                disabled={!editing}
+                min="15"
+                max="120"
+              />
+
+              <label>Working Hours</label>
+              <div className="working-hours-container mb-4">
+                {["sun", "mon", "tue", "wed", "thu", "fri", "sat"].map((day) => (
+                  <div key={day} className="d-flex align-items-center gap-2 mb-2">
+                    <span style={{ width: "50px", textTransform: "capitalize" }}>{day}</span>
+                    <input
+                      type="checkbox"
+                      checked={!doctor.workingHours?.[day]?.isOff}
+                      onChange={(e) => handleWorkingHoursChange(day, "isOff", !e.target.checked)}
+                      disabled={!editing}
+                    />
+                    <label className="mb-0 ms-1 me-3">Working</label>
+                    <input
+                      type="time"
+                      value={doctor.workingHours?.[day]?.start || "09:00"}
+                      onChange={(e) => handleWorkingHoursChange(day, "start", e.target.value)}
+                      disabled={!editing || doctor.workingHours?.[day]?.isOff}
+                      className="form-control"
+                      style={{ width: "120px" }}
+                    />
+                    <span>to</span>
+                    <input
+                      type="time"
+                      value={doctor.workingHours?.[day]?.end || "17:00"}
+                      onChange={(e) => handleWorkingHoursChange(day, "end", e.target.value)}
+                      disabled={!editing || doctor.workingHours?.[day]?.isOff}
+                      className="form-control"
+                      style={{ width: "120px" }}
+                    />
+                  </div>
+                ))}
+              </div>
+
               <button
                 className="save-btn"
                 onClick={async () => {
@@ -185,6 +256,8 @@ function DrProfile() {
                         specialization: doctor.specialization,
                         bio: doctor.bio,
                         avatarUrl: doctor.avatarUrl,
+                        workingHours: doctor.workingHours,
+                        slotDuration: doctor.slotDuration,
                       }
                     );
 

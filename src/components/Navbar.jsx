@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../api/api";
 import '../App.css';
 
@@ -24,24 +24,24 @@ function Navbar() {
     <nav className="navbar navbar-expand-lg mt-3">
       <div className="container">
 
-        <a className="navbar-brand headerstyle fst-italic h1 fs-2" href="/home">
+        <Link className="navbar-brand headerstyle fst-italic h1 fs-2" to="/home">
           Odonto
-        </a>
+        </Link>
 
         <div className="collapse navbar-collapse">
 
           <ul className="navbar-nav m-auto mb-2 pb-3 mb-lg-0">
 
             <li className="nav-item">
-              <a className="nav-link active navbarli1" href="/home">Home</a>
+              <Link className="nav-link active navbarli1" to="/home">Home</Link>
             </li>
 
             <li className="nav-item">
-              <a className="nav-link navbarli1 text-black" href="/Appointments">Appointments</a>
+              <Link className="nav-link navbarli1 text-black" to="/Appointments">Appointments</Link>
             </li>
 
             <li className="nav-item">
-              <a className="nav-link navbarli1 text-black" href="/Chat">Chat</a>
+              <Link className="nav-link navbarli1 text-black" to="/Chat">Chat</Link>
             </li>
 
             <li className="nav-item">

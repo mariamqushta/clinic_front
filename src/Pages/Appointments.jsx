@@ -206,6 +206,12 @@ console.log(filteredAppointments);
               >
                 {app.status}
               </span>
+
+              {app.notes && (
+                <div className="mt-3 p-2 bg-light border rounded">
+                  <span className="fw-semibold">Notes:</span> {app.notes}
+                </div>
+              )}
             </div>
 
             <div>

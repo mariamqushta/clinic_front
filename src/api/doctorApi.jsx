@@ -11,3 +11,9 @@ export const getAllDoctors = async () => {
   const res = await api.get("/doctors");
   return res.data.data.doctors;
 };
+
+// GET doctor availability
+export const getDoctorAvailability = async (id, date) => {
+  const res = await api.get(`/doctors/${id}/availability?date=${date}`);
+  return res.data.data;
+};

@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Navbar from "../components/Navbar";
 import { createAppointment ,updateAppointment} from "../api/appointmentApi";
-import { getDoctorById } from "../api/doctorApi";
+import { getDoctorById, getDoctorAvailability } from "../api/doctorApi";
 import { getDoctorReviews } from "../api/reviewApi";
 import { FaLocationArrow, FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -20,6 +20,9 @@ function Book1() {
   const [reviewsData, setReviewsData] = useState({ averageRating: 0, reviews: [] });
   const [selectedTime, setSelectedTime] = useState(null);
   const [date, setDate] = useState(new Date());
+  const [availableTimes, setAvailableTimes] = useState([]);
+  const [isOff, setIsOff] = useState(false);
+  const [notes, setNotes] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const isEditable =
   editAppointment &&
@@ -50,8 +53,38 @@ function Book1() {
     if (editAppointment) {
       setDate(new Date(editAppointment.date));
       setSelectedTime(editAppointment.time);
+      setNotes(editAppointment.notes || "");
     }
   }, [editAppointment]);
+
+  // Fetch dynamic availability
+  useEffect(() => {
+    const fetchAvailability = async () => {
+      if (!id || !date) return;
+      try {
+        const dateStr = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
+        const data = await getDoctorAvailability(id, dateStr);
+        if (data.isOff) {
+          setIsOff(true);
+          setAvailableTimes([]);
+        } else {
+          setIsOff(false);
+          const formattedSlots = data.slots.map(slot => {
+            let [h, m] = slot.start.split(":").map(Number);
+            const ampm = h >= 12 ? "PM" : "AM";
+            h = h % 12 || 12;
+            const hStr = h < 10 ? "0" + h : h;
+            const mStr = m < 10 ? "0" + m : m;
+            return `${hStr}:${mStr} ${ampm}`;
+          });
+          setAvailableTimes(formattedSlots);
+        }
+      } catch (err) {
+        console.log("Error fetching availability:", err);
+      }
+    };
+    fetchAvailability();
+  }, [id, date]);
 
 const handleBooking = async () => {
   if (!date || !selectedTime) {
@@ -80,14 +113,16 @@ const handleBooking = async () => {
 if (editAppointment && isEditable) {
   await updateAppointment(editAppointment._id, {
     date: bookingDate.toISOString(),
-    duration: 30,
+    duration: doctor.slotDuration || 30,
+    notes,
   });
 } else if (!editAppointment) {
     await createAppointment({
     doctorId: id,
     date: bookingDate.toISOString(),
-    duration: 30,
+    duration: doctor.slotDuration || 30,
     status: "pending",
+    notes,
   });
 } else {
   toast.error("This appointment cannot be rescheduled anymore.");
@@ -215,6 +250,7 @@ console.log("DOCTOR ID:", doctor?._id);
               <DatePicker
                 selected={date}
                 onChange={(date) => setDate(date)}
+                minDate={new Date()}
                 inline
               />
             </div>
@@ -226,35 +262,46 @@ console.log("DOCTOR ID:", doctor?._id);
             </h3>
 
             <div className="container-fluid m-auto row mt-4">
-              {[
-                "09:00 AM",
-                "10:00 AM",
-                "11:00 AM",
-                "12:00 PM",
-                "01:00 PM",
-                "02:00 PM",
-                "03:00 PM",
-                "04:00 PM",
-                "05:00 PM",
-              ].map((time, index) => (
-                <div
-                  key={index}
-                  className="col-4 mb-3"
-                  onClick={() => setSelectedTime(time)}
-                >
-                  <div
-                    className={`time-slot ${
-                      selectedTime === time
-                        ? "active"
-                        : ""
-                    }`}
-                  >
-                    {time}
-                  </div>
+              {isOff ? (
+                <div className="text-center text-muted fs-5 mt-4">
+                  Doctor is not available on this day.
                 </div>
-              ))}
+              ) : availableTimes.length === 0 ? (
+                <div className="text-center text-danger fw-bold fs-5 mt-4">
+                  المواعيد في هذا اليوم اكتملت
+                </div>
+              ) : (
+                availableTimes.map((time, index) => (
+                  <div
+                    key={index}
+                    className="col-4 mb-3"
+                    onClick={() => setSelectedTime(time)}
+                  >
+                    <div
+                      className={`time-slot ${
+                        selectedTime === time
+                          ? "active"
+                          : ""
+                      }`}
+                    >
+                      {time}
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
+        </div>
+
+        <div className="container mt-4 w-75 m-auto">
+          <label className="fw-semibold mb-2 fs-5">Notes / Reason for visit</label>
+          <textarea
+            className="form-control"
+            rows="3"
+            placeholder="Please write your symptoms or reason for visit here..."
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+          ></textarea>
         </div>
 
         <div className="d-flex justify-content-center mt-4">
