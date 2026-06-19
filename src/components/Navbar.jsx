@@ -63,7 +63,7 @@ function Navbar() {
             <img
               src={
                 user?.avatarUrl ||
-                "/female-person-default-profile-no-260nw-2069253950.webp"
+                `https://ui-avatars.com/api/?name=${user?.name || "User"}&background=random`
               }
               className="rounded-circle navimg"
               alt="profile"

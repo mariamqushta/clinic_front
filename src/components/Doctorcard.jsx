@@ -6,7 +6,7 @@ function Doctorcard({ doctor }) {
   return (
     <div className=" card border border-2  rounded-4 text-center p-3 m-5">
       <img
-        src={doctor.avatarUrl || "/default-doctor.png"}
+        src={doctor.avatarUrl || `https://ui-avatars.com/api/?name=${doctor.name || "Doctor"}&background=random`}
         className="card-img-top w-50  mx-auto doctorImg"
         alt={doctor.name}
       />

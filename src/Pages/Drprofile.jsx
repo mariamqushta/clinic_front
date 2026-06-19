@@ -110,15 +110,15 @@ function DrProfile() {
         <div className="col-10" style={{ height: "100vh", overflowY: "auto", paddingBottom: "50px" }}>
           <div className="content">
             <div className="profile-card mb-4">
-              <div className="doctor-image">
+              <div className="doctor-image" style={{ cursor: "pointer" }} onClick={() => fileInputRef.current?.click()}>
                 {doctor.avatarUrl ? (
                   <img
                     src={doctor.avatarUrl}
-                    style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                    style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "50%" }}
                     alt="doctor"
                   />
                 ) : (
-                  <FaUserCircle className="doctor-icon" />
+                  <FaUserCircle className="doctor-icon" size={100} />
                 )}
 
                 <input
@@ -137,7 +137,10 @@ function DrProfile() {
                   <FaPen
                     className="edit-icon"
                     style={{ cursor: "pointer" }}
-                    onClick={() => fileInputRef.current?.click()}
+                    onClick={() => {
+                      setBackupDoctor(doctor);
+                      setEditing(true);
+                    }}
                   />
                 </div>
 

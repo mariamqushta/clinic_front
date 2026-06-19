@@ -209,7 +209,7 @@ console.log("DOCTOR ID:", doctor?._id);
           <div className="d-flex align-items-between">
             <div className="d-flex gap-4 align-items-center flex-wrap">
               <img
-                src={doctor.avatarUrl}
+                src={doctor.avatarUrl || `https://ui-avatars.com/api/?name=${doctor.name || "Doctor"}&background=random`}
                 alt={doctor.name}
                 style={{
                   width: "200px",
