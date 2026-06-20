@@ -66,9 +66,15 @@ export default function LoginPage() {
         password: form.password,
       });
 
-      if (data.token) {
+      if (data.access_token) {
+        localStorage.setItem("token", data.access_token);
+        localStorage.setItem("role", data.data?.user?.role || "patient");
+        localStorage.setItem("user", JSON.stringify(data.data?.user));
+      } else if (data.token) {
+        // Fallback in case API shape changes
         localStorage.setItem("token", data.token);
-        localStorage.setItem("role", "patient");
+        localStorage.setItem("role", data.data?.user?.role || "patient");
+        localStorage.setItem("user", JSON.stringify(data.data?.user));
       }
 
       toast.success("Login successful");

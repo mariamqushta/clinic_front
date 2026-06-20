@@ -27,6 +27,11 @@ export default function Chat1PageDoctor() {
 
   const socketRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const activeChatRef = useRef(activeChat);
+
+  useEffect(() => {
+    activeChatRef.current = activeChat;
+  }, [activeChat]);
 
   // Fetch all chats
   useEffect(() => {
@@ -44,7 +49,39 @@ export default function Chat1PageDoctor() {
     fetchChats();
   }, []);
 
-  // Socket connection & fetching messages for active chat
+  // Socket Initialization
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    socketRef.current = io("http://localhost:3000", {
+      query: { token },
+    });
+
+    socketRef.current.on("connect", () => {
+      if (activeChatRef.current) {
+        socketRef.current.emit("joinChat", activeChatRef.current._id);
+      }
+    });
+
+    socketRef.current.on("newMessage", (msg) => {
+      setMessages((prev) => [...prev, msg]);
+    });
+
+    socketRef.current.on("messageEdited", (updatedMsg) => {
+      setMessages((prev) => prev.map(m => m._id === updatedMsg._id ? updatedMsg : m));
+    });
+
+    socketRef.current.on("messageDeleted", (deletedMsgId) => {
+      setMessages((prev) => prev.filter(m => m._id !== deletedMsgId));
+    });
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
+  }, []);
+
+  // Fetching messages and joining room when activeChat changes
   useEffect(() => {
     if (!activeChat) return;
 
@@ -62,32 +99,13 @@ export default function Chat1PageDoctor() {
 
     fetchMessages();
 
-    // Init socket
-    const token = localStorage.getItem("token");
-    socketRef.current = io("http://localhost:3000", {
-      query: { token },
-    });
-
-    socketRef.current.on("connect", () => {
+    if (socketRef.current) {
       socketRef.current.emit("joinChat", activeChat._id);
-    });
-
-    socketRef.current.on("newMessage", (msg) => {
-      setMessages((prev) => [...prev, msg]);
-    });
-
-    socketRef.current.on("messageEdited", (updatedMsg) => {
-      setMessages((prev) => prev.map(m => m._id === updatedMsg._id ? updatedMsg : m));
-    });
-
-    socketRef.current.on("messageDeleted", (deletedMsgId) => {
-      setMessages((prev) => prev.filter(m => m._id !== deletedMsgId));
-    });
+    }
 
     return () => {
       if (socketRef.current) {
         socketRef.current.emit("leaveChat", activeChat._id);
-        socketRef.current.disconnect();
       }
     };
   }, [activeChat]);

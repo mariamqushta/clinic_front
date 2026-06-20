@@ -32,6 +32,11 @@ export default function Chat1PagePatient() {
 
   const socketRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const activeChatRef = useRef(activeChat);
+
+  useEffect(() => {
+    activeChatRef.current = activeChat;
+  }, [activeChat]);
 
   // Fetch all chats
   useEffect(() => {
@@ -49,9 +54,46 @@ export default function Chat1PagePatient() {
     fetchChats();
   }, []);
 
-  // Socket connection & fetching messages for active chat
+  // Socket Initialization
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    socketRef.current = io("http://localhost:3000", {
+      query: { token },
+    });
+
+    socketRef.current.on("connect", () => {
+      console.log("Socket connected! ID:", socketRef.current.id);
+      if (activeChatRef.current) {
+        console.log("Emitting joinChat for activeChatRef:", activeChatRef.current._id);
+        socketRef.current.emit("joinChat", activeChatRef.current._id);
+      }
+    });
+
+    socketRef.current.on("newMessage", (message) => {
+      console.log("Received newMessage:", message);
+      setMessages((prev) => [...prev, message]);
+    });
+
+    socketRef.current.on("messageEdited", (updatedMsg) => {
+      setMessages((prev) => prev.map(m => m._id === updatedMsg._id ? updatedMsg : m));
+    });
+
+    socketRef.current.on("messageDeleted", (deletedMsgId) => {
+      setMessages((prev) => prev.filter(m => m._id !== deletedMsgId));
+    });
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
+  }, []);
+
+  // Fetching messages and joining room when activeChat changes
   useEffect(() => {
     if (!activeChat) return;
+    
+    console.log("activeChat changed! New ID:", activeChat._id);
 
     const fetchMessages = async () => {
       try {
@@ -67,35 +109,20 @@ export default function Chat1PagePatient() {
 
     fetchMessages();
 
-    // Init socket
-    const token = localStorage.getItem("token");
-    socketRef.current = io("http://localhost:3000", {
-      query: { token },
-    });
-
-    socketRef.current.on("connect", () => {
+    if (socketRef.current) {
+      console.log("Emitting joinChat from activeChat effect:", activeChat._id);
       socketRef.current.emit("joinChat", activeChat._id);
-    });
-
-    socketRef.current.on("newMessage", (message) => {
-      setMessages((prev) => [...prev, message]);
-    });
-
-    socketRef.current.on("messageEdited", (updatedMsg) => {
-      setMessages((prev) => prev.map(m => m._id === updatedMsg._id ? updatedMsg : m));
-    });
-
-    socketRef.current.on("messageDeleted", (deletedMsgId) => {
-      setMessages((prev) => prev.filter(m => m._id !== deletedMsgId));
-    });
+    }
 
     return () => {
       if (socketRef.current) {
+        console.log("Cleaning up activeChat effect, emitting leaveChat:", activeChat._id);
         socketRef.current.emit("leaveChat", activeChat._id);
-        socketRef.current.disconnect();
       }
     };
   }, [activeChat]);
+
+
 
   // Auto scroll to bottom
   useEffect(() => {
